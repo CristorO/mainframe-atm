@@ -1,6 +1,7 @@
 package bo.edu.ucb.sis213;
 
 import java.util.Scanner;
+import java.beans.Statement;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -52,7 +53,7 @@ public class App {
             int pinIngresado = scanner.nextInt();
             if (validarPIN(connection, pinIngresado)) {
                 pinActual = pinIngresado;
-                mostrarMenu();
+                mostrarMenu(connection);
                 break;
             } else {
                 intentos--;
@@ -84,7 +85,7 @@ public class App {
         return false;
     }
 
-    public static void mostrarMenu() {
+    public static void mostrarMenu(Connection connection) {
         Scanner scanner = new Scanner(System.in);
         while (true) {
             System.out.println("\nMenú Principal:");
@@ -98,16 +99,16 @@ public class App {
 
             switch (opcion) {
                 case 1:
-                    consultarSaldo();
+                    consultarSaldo(connection);
                     break;
                 case 2:
-                    realizarDeposito();
+                    realizarDeposito(connection);
                     break;
                 case 3:
-                    realizarRetiro();
+                    realizarRetiro(connection);
                     break;
                 case 4:
-                    cambiarPIN();
+                    cambiarPIN(connection);
                     break;
                 case 5:
                     System.out.println("Gracias por usar el cajero. ¡Hasta luego!");
@@ -119,57 +120,132 @@ public class App {
         }
     }
 
-    public static void consultarSaldo() {
-        System.out.println("Su saldo actual es: $" + saldo);
+    public static void consultarSaldo(Connection connection) {
+        String query = "SELECT saldo FROM usuarios WHERE id = ?";
+        try{
+            PreparedStatement preparedStatement = connection.prepareStatement(query);
+            preparedStatement.setInt(1, usuarioId);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if(resultSet.next()){
+                System.out.println("Su saldo actual es: $" + resultSet.getDouble("saldo"));
+            }         
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
+        
     }
 
-    public static void realizarDeposito() {
+    public static void realizarDeposito(Connection connection) {
+        String queryUsuarios = "UPDATE usuarios SET saldo=? WHERE id=?";
+        String queryHistorico = "INSERT INTO historico (usuario_id, tipo_operacion, cantidad) VALUES (?, 'deposito', ?)";
         Scanner scanner = new Scanner(System.in);
         System.out.print("Ingrese la cantidad a depositar: $");
         double cantidad = scanner.nextDouble();
 
-        if (cantidad <= 0) {
-            System.out.println("Cantidad no válida.");
-        } else {
-            saldo += cantidad;
-            System.out.println("Depósito realizado con éxito. Su nuevo saldo es: $" + saldo);
+        try {
+            if (cantidad <= 0) {
+                System.out.println("Cantidad no válida.");
+            } else {
+                PreparedStatement PSUsuarios = connection.prepareStatement(queryUsuarios);
+                PreparedStatement PSHistorico = connection.prepareStatement(queryHistorico);
+                saldo += cantidad;
+
+                PSUsuarios.setDouble(1, saldo);
+                PSUsuarios.setInt(2, usuarioId);
+                PSUsuarios.executeUpdate();
+
+                PSHistorico.setInt(1, usuarioId);
+                PSHistorico.setDouble(2, cantidad);
+                PSHistorico.executeUpdate();
+                System.out.println("Depósito realizado con éxito. Su nuevo saldo es: $" + saldo);
+                PSUsuarios.close();
+                PSHistorico.close();
+            }
+        } catch(Exception e){
+            e.printStackTrace();
         }
     }
 
-    public static void realizarRetiro() {
+    public static void realizarRetiro(Connection connection) {
+        String queryUsuarios = "UPDATE usuarios SET saldo=? WHERE id=?";
+        String queryHistorico = "INSERT INTO historico (usuario_id, tipo_operacion, cantidad) VALUES (?, 'retiro', ?)";
         Scanner scanner = new Scanner(System.in);
         System.out.print("Ingrese la cantidad a retirar: $");
         double cantidad = scanner.nextDouble();
 
-        if (cantidad <= 0) {
-            System.out.println("Cantidad no válida.");
-        } else if (cantidad > saldo) {
-            System.out.println("Saldo insuficiente.");
-        } else {
-            saldo -= cantidad;
-            System.out.println("Retiro realizado con éxito. Su nuevo saldo es: $" + saldo);
+        try {
+            if (cantidad <= 0) {
+                System.out.println("Cantidad no válida.");
+            } else if (cantidad > saldo) {
+                System.out.println("Saldo insuficiente.");
+            } else {
+                PreparedStatement PSUsuarios = connection.prepareStatement(queryUsuarios);
+                PreparedStatement PSHistorico = connection.prepareStatement(queryHistorico);
+                saldo -= cantidad;
+
+                PSUsuarios.setDouble(1, saldo);
+                PSUsuarios.setInt(2, usuarioId);
+                PSUsuarios.executeUpdate();
+
+                PSHistorico.setInt(1, usuarioId);
+                PSHistorico.setDouble(2, cantidad);
+                PSHistorico.executeUpdate();
+                System.out.println("Retiro realizado con éxito. Su nuevo saldo es: $" + saldo);
+                PSUsuarios.close();
+                PSHistorico.close();
+            }
+        } catch (Exception e){
+            e.printStackTrace();
         }
     }
 
-    public static void cambiarPIN() {
+    public static void cambiarPIN(Connection connection) {
         Scanner scanner = new Scanner(System.in);
         System.out.print("Ingrese su PIN actual: ");
         int pinIngresado = scanner.nextInt();
 
-        if (pinIngresado == pinActual) {
-            System.out.print("Ingrese su nuevo PIN: ");
-            int nuevoPin = scanner.nextInt();
-            System.out.print("Confirme su nuevo PIN: ");
-            int confirmacionPin = scanner.nextInt();
+        try {
+            if (autenticarPIN(connection, pinIngresado)) {
+                System.out.print("Ingrese su nuevo PIN: ");
+                int nuevoPin = scanner.nextInt();
+                System.out.print("Confirme su nuevo PIN: ");
+                int confirmacionPin = scanner.nextInt();
 
-            if (nuevoPin == confirmacionPin) {
-                pinActual = nuevoPin;
-                System.out.println("PIN actualizado con éxito.");
+                if (nuevoPin == confirmacionPin) {
+                    String query = "UPDATE usuarios SET pin=? WHERE id=?";
+                    PreparedStatement preparedStatement = connection.prepareStatement(query);
+                    preparedStatement.setInt(1, nuevoPin);
+                    preparedStatement.setInt(2, usuarioId);
+                    preparedStatement.executeUpdate();
+
+                    System.out.println("PIN actualizado con éxito.");
+                    preparedStatement.close();
+                } else {
+                    System.out.println("Los PINs no coinciden.");
+                }
             } else {
-                System.out.println("Los PINs no coinciden.");
+                System.out.println("PIN incorrecto.");
             }
-        } else {
-            System.out.println("PIN incorrecto.");
+        } catch(Exception e){
+            e.printStackTrace();
         }
+        
+    }
+
+    public static boolean autenticarPIN(Connection connection, int pin){
+        String query = "SELECT pin FROM usuarios WHERE pin = ?";
+        try{
+            PreparedStatement preparedStatement = connection.prepareStatement(query);
+            preparedStatement.setInt(1, pin);
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            if (resultSet.next()){
+                return true;
+            }
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
+
+        return false;
     }
 }

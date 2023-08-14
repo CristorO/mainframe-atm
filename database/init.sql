@@ -1,4 +1,3 @@
-
 -- Crear la tabla de usuarios (modificada para incluir el nombre)
 CREATE TABLE IF NOT EXISTS usuarios (
     id INT AUTO_INCREMENT PRIMARY KEY,
@@ -28,10 +27,10 @@ INSERT INTO usuarios (nombre, pin, saldo) VALUES
 
 -- Insertar datos de ejemplo en historico (asumiendo que los IDs de los usuarios coinciden con los valores insertados anteriormente)
 -- Juan Perez hizo un depósito de 200.0
-INSERT INTO historico (usuario_id, tipo_operacion, cantidad) VALUES (1, 'depósito', 1000.0);
-INSERT INTO historico (usuario_id, tipo_operacion, cantidad) VALUES (2, 'depósito', 2500.0);
-INSERT INTO historico (usuario_id, tipo_operacion, cantidad) VALUES (3, 'depósito', 500.0);
-INSERT INTO historico (usuario_id, tipo_operacion, cantidad) VALUES (4, 'depósito', 750.0);
-INSERT INTO historico (usuario_id, tipo_operacion, cantidad) VALUES (5, 'depósito', 3000.0);
+INSERT INTO historico (usuario_id, tipo_operacion, cantidad) VALUES (1, 'deposito', 1000.0);
+INSERT INTO historico (usuario_id, tipo_operacion, cantidad) VALUES (2, 'deposito', 2500.0);
+INSERT INTO historico (usuario_id, tipo_operacion, cantidad) VALUES (3, 'deposito', 500.0);
+INSERT INTO historico (usuario_id, tipo_operacion, cantidad) VALUES (4, 'deposito', 750.0);
+INSERT INTO historico (usuario_id, tipo_operacion, cantidad) VALUES (5, 'deposito', 3000.0);
 
 
