@@ -1,19 +1,20 @@
 package bo.edu.ucb.sis213;
 
+import java.math.BigDecimal;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
 public class Operations {
-    public static double consultarSaldo(int idUser) {
+    public static BigDecimal consultarSaldo(int idUser) {
         Conection conection = new Conection();
-        double saldo = 0.0;
+        BigDecimal saldo = BigDecimal.valueOf(0.00);
         String query = "SELECT saldo FROM usuarios WHERE id = ?";
         try{
             PreparedStatement preparedStatement = conection.getConnection().prepareStatement(query);
             preparedStatement.setInt(1, idUser);
             ResultSet resultSet = preparedStatement.executeQuery();
             if (resultSet.next()){
-                saldo = resultSet.getDouble("saldo");
+                saldo = resultSet.getBigDecimal("saldo");
             }
         } catch(Exception e) {
             e.printStackTrace();
@@ -21,24 +22,24 @@ public class Operations {
         return saldo;
     }
 
-    public static boolean realizarDeposito(int idUser, double cantidad) {
+    public static boolean realizarDeposito(int idUser, BigDecimal cantidad) {
         Conection conection = new Conection();
-        double saldo = consultarSaldo(idUser);
+        BigDecimal saldo = consultarSaldo(idUser);
         String queryUsuarios = "UPDATE usuarios SET saldo=? WHERE id=?";
         String queryHistorico = "INSERT INTO historico (usuario_id, tipo_operacion, cantidad) VALUES (?, 'deposito', ?)";
 
         try {
-            if (cantidad > 0) {
+            if (cantidad.intValue() > 0) {
                 PreparedStatement PSUsuarios = conection.getConnection().prepareStatement(queryUsuarios);
                 PreparedStatement PSHistorico = conection.getConnection().prepareStatement(queryHistorico);
-                saldo += cantidad;
+                saldo = saldo.add(cantidad);
 
-                PSUsuarios.setDouble(1, saldo);
+                PSUsuarios.setBigDecimal(1, saldo);
                 PSUsuarios.setInt(2, idUser);
                 PSUsuarios.executeUpdate();
 
                 PSHistorico.setInt(1, idUser);
-                PSHistorico.setDouble(2, cantidad);
+                PSHistorico.setBigDecimal(2, cantidad);
                 PSHistorico.executeUpdate();
 
                 PSUsuarios.close();
@@ -51,24 +52,24 @@ public class Operations {
         return false;
     }
 
-    public static boolean realizarRetiro(int idUser, double cantidad) {
+    public static boolean realizarRetiro(int idUser, BigDecimal cantidad) {
         Conection conection = new Conection();
         String queryUsuarios = "UPDATE usuarios SET saldo=? WHERE id=?";
         String queryHistorico = "INSERT INTO historico (usuario_id, tipo_operacion, cantidad) VALUES (?, 'retiro', ?)";
-        double saldo = consultarSaldo(idUser);
+        BigDecimal saldo = consultarSaldo(idUser);
 
         try {
-            if (cantidad > 0 && cantidad < saldo) {
+            if (cantidad.intValue() > 0 && cantidad.intValue() < saldo.intValue()) {
                 PreparedStatement PSUsuarios = conection.getConnection().prepareStatement(queryUsuarios);
                 PreparedStatement PSHistorico = conection.getConnection().prepareStatement(queryHistorico);
-                saldo -= cantidad;
+                saldo = saldo.subtract(cantidad);
 
-                PSUsuarios.setDouble(1, saldo);
+                PSUsuarios.setBigDecimal(1, saldo);
                 PSUsuarios.setInt(2, idUser);
                 PSUsuarios.executeUpdate();
 
                 PSHistorico.setInt(1, idUser);
-                PSHistorico.setDouble(2, cantidad);
+                PSHistorico.setBigDecimal(2, cantidad);
                 PSHistorico.executeUpdate();
 
                 PSUsuarios.close();

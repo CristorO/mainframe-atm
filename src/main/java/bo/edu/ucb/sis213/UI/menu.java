@@ -7,6 +7,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.math.BigDecimal;
 
 public class menu extends JFrame{
     private JButton saldoButton;
@@ -59,7 +60,7 @@ public class menu extends JFrame{
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 Operations transactions = new Operations();
-                Double saldo = transactions.consultarSaldo(idUser);
+                BigDecimal saldo = transactions.consultarSaldo(idUser);
                 JOptionPane.showMessageDialog(null, "Su saldo es de Bs. " + saldo);
             }
         });
@@ -68,10 +69,9 @@ public class menu extends JFrame{
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 Operations transactions = new Operations();
-                String monto = JOptionPane.showInputDialog("Ingrese el monto a depositar");
-                Double deposito = Double.parseDouble(monto);
+                BigDecimal deposito = BigDecimal.valueOf(Long.parseLong(JOptionPane.showInputDialog("Ingrese el monto a depositar")));
                 if(transactions.realizarDeposito(idUser, deposito)){
-                    Double saldo = transactions.consultarSaldo(idUser);
+                    BigDecimal saldo = transactions.consultarSaldo(idUser);
                     JOptionPane.showMessageDialog(null, "Deposito realizado con exito, su saldo es de Bs. " + saldo);
                 } else{
                     JOptionPane.showMessageDialog(null, "Monto invalido, favor de ingresar nuevamente");
@@ -83,10 +83,10 @@ public class menu extends JFrame{
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 Operations transactions = new Operations();
-                Double retiro = Double.parseDouble(JOptionPane.showInputDialog("Ingrese el monto a retirar"));
+                BigDecimal retiro = BigDecimal.valueOf(Long.parseLong(JOptionPane.showInputDialog("Ingrese el monto a retirar")));
 
                 if (transactions.realizarRetiro(idUser, retiro)) {
-                    Double saldo = transactions.consultarSaldo(idUser);
+                    BigDecimal saldo = transactions.consultarSaldo(idUser);
                     JOptionPane.showMessageDialog(null, "Retiro realizado con exito, su saldo es de Bs. " + saldo);
                 } else {
                     JOptionPane.showMessageDialog(null, "Monto invalido o saldo insuficiente, favor de ingresar nuevamente");
