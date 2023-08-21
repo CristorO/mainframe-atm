@@ -54,6 +54,7 @@ public class menu extends JFrame{
         menuPanel.add(salirButton, gbc);
 
         setContentPane(menuPanel);
+
         saldoButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
@@ -62,6 +63,7 @@ public class menu extends JFrame{
                 JOptionPane.showMessageDialog(null, "Su saldo es de Bs. " + saldo);
             }
         });
+
         depositoButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
@@ -76,6 +78,7 @@ public class menu extends JFrame{
                 }
             }
         });
+
         retiroButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
@@ -90,6 +93,7 @@ public class menu extends JFrame{
                 }
             }
         });
+
         passwordButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
@@ -109,6 +113,7 @@ public class menu extends JFrame{
                 }
             }
         });
+
         salirButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
