@@ -99,3 +99,38 @@ use atm;
 
 5. Ejecutan el script init.sql de la carpeta database.
 
+### Manual de Usuario
+
+1. Inicialmente tenemos el inicio de sesion donde colocaremos el alias y password de un usuario
+   ![imagen](https://github.com/CristorO/mainframe-atm/assets/125508127/fa358dc7-65c7-48b9-97ce-484e7988b7ad)
+
+2. Luego tenemos el menu de opciones el cual cuenta con:
+   
+   ![imagen](https://github.com/CristorO/mainframe-atm/assets/125508127/139f9953-263f-40c0-8e22-dfc0a6cc4b62)
+
+- Consultar saldo                                                     
+   ![imagen](https://github.com/CristorO/mainframe-atm/assets/125508127/a5177b6f-fe1e-4c8f-af9e-b7eddcec2881)
+
+- Realizar deposito: donde colocaremos un valor para aumentar el saldo (si el valor es alfabetico no realizara ninguna accion)
+   ![imagen](https://github.com/CristorO/mainframe-atm/assets/125508127/9ca59fda-3bb5-4071-bcd1-205bbfc74d98)
+   ![imagen](https://github.com/CristorO/mainframe-atm/assets/125508127/0cb4d7e5-6b75-4c2e-ad17-fbedcf51918d)
+
+- Realizar retiro: donde colocaremos un valor para disminuir el saldo (si el valor es alfabetico o el monto del retiro es mayor al del saldo no se realizara ninguna accion)
+
+   ![imagen](https://github.com/CristorO/mainframe-atm/assets/125508127/3d14bc5c-7c0d-46cb-bf9a-cb804ba6f1a5)
+   ![imagen](https://github.com/CristorO/mainframe-atm/assets/125508127/ae4b585d-207d-4f42-8e69-f2f914f7237d)
+
+- Cambiar password: Inicialmente ingresaremos el password que usemos (Si se ingresan valores alfabeticos no se realizara ninguna accion)
+
+   ![imagen](https://github.com/CristorO/mainframe-atm/assets/125508127/001e14b2-ece3-4de5-a4d3-dc9f8756bd3f)
+
+   Si no nos equivocamos de password procederemos a colocar el nuevo password y confirmar el mismo
+      ![imagen](https://github.com/CristorO/mainframe-atm/assets/125508127/ec91ad7f-cc8b-42aa-b413-76643e04d060)
+      ![imagen](https://github.com/CristorO/mainframe-atm/assets/125508127/a14d9dd9-4b31-4ee6-9a70-8b23b3f5c53d)
+      ![imagen](https://github.com/CristorO/mainframe-atm/assets/125508127/5d668835-a14f-426f-a89f-f4cacfae17cb)
+      
+   Caso contrario un mensaje de alerta nos informara el error de password o de confirmacion del nuevo password
+      ![imagen](https://github.com/CristorO/mainframe-atm/assets/125508127/a31e0645-a63a-4092-bff4-5f460ff96ebe)
+      ![imagen](https://github.com/CristorO/mainframe-atm/assets/125508127/f9c23be6-6f89-462a-a684-7d75253c049a)
+
+- Salir
