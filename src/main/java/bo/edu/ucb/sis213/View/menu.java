@@ -1,7 +1,7 @@
-package bo.edu.ucb.sis213.UI;
+package bo.edu.ucb.sis213.View;
 
-import bo.edu.ucb.sis213.ChangePassword;
-import bo.edu.ucb.sis213.Operations;
+import bo.edu.ucb.sis213.BL.ChangePin;
+import bo.edu.ucb.sis213.BL.Operations;
 
 import javax.swing.*;
 import java.awt.*;
@@ -97,13 +97,13 @@ public class menu extends JFrame{
         passwordButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-                ChangePassword changePassword = new ChangePassword();
+                ChangePin changePin = new ChangePin();
                 int pass = Integer.parseInt(JOptionPane.showInputDialog("Ingrese su password"));
 
-                if (changePassword.verifyPass(idUser, pass)) {
+                if (changePin.verifyPin(idUser, pass)) {
                     int newPass = Integer.parseInt(JOptionPane.showInputDialog("Ingrese su nuevo password"));
                     int confirmPass = Integer.parseInt(JOptionPane.showInputDialog("Confirme su password"));
-                    if (changePassword.changePass(idUser, newPass, confirmPass)) {
+                    if (changePin.changePin(idUser, newPass, confirmPass)) {
                         JOptionPane.showMessageDialog(null, "Password cambiado correctamente");
                     } else {
                         JOptionPane.showMessageDialog(null, "Passwords no coinciden");

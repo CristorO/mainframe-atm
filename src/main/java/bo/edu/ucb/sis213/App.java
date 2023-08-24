@@ -1,6 +1,6 @@
 package bo.edu.ucb.sis213;
 
-import bo.edu.ucb.sis213.UI.logIn;
+import bo.edu.ucb.sis213.View.logIn;
 
 public class App {
     public static void main(String[] args) {

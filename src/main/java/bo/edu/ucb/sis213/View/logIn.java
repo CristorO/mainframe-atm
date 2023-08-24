@@ -1,6 +1,6 @@
-package bo.edu.ucb.sis213.UI;
+package bo.edu.ucb.sis213.View;
 
-import bo.edu.ucb.sis213.VerifyUser;
+import bo.edu.ucb.sis213.BL.VerifyUser;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;

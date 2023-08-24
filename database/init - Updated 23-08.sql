@@ -3,7 +3,7 @@ CREATE TABLE IF NOT EXISTS usuarios (
     id INT AUTO_INCREMENT PRIMARY KEY,
     nombre VARCHAR(255) NOT NULL,
     alias VARCHAR(100) NOT NULL UNIQUE,
-    pass INT NOT NULL,
+    pin INT NOT NULL,
     saldo DOUBLE NOT NULL
 );
 
@@ -19,7 +19,7 @@ CREATE TABLE IF NOT EXISTS historico (
 
 -- Insertar datos de ejemplo
 -- Insertar datos de ejemplo en usuarios
-INSERT INTO usuarios (nombre, alias, pass, saldo) VALUES
+INSERT INTO usuarios (nombre, alias, pin, saldo) VALUES
 ('Juan Perez', 'jperez', 1234, 1000.0),
 ('Ana Ramirez', 'aramirez', 5678, 2500.0),
 ('Carlos Gomez', 'cgomez', 9012, 500.0),
